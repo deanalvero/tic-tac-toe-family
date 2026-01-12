@@ -1,6 +1,8 @@
 package io.github.deanalvero.tictactoefamily.model
 
-sealed class Player(val text: String) {
-    object P1 : Player("Player 1")
-    object P2 : Player("Player 2")
+import androidx.compose.ui.graphics.Color
+
+enum class Player(val color: Color, val label: String) {
+    BLUE(Color(0xFF42A5F5), "Blue Player"),
+    RED(Color(0xFFEF5350), "Red Player")
 }
