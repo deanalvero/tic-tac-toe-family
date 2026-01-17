@@ -153,7 +153,16 @@ class GameEngine(
     }
 
     fun runBot() {
-        val action = bot.decideMove(board, p2Hand, Player.RED)
+        val action = bot.decideMove(
+            board = board.map {
+                it.toList()
+            },
+            hands = mapOf(
+                Player.BLUE to p1Hand.toList(),
+                Player.RED to p2Hand.toList()
+            ),
+            botPlayer = Player.RED
+        )
         if (action != null) executeMove(action.source, action.targetRow, action.targetCol)
         else currentPlayer = Player.BLUE
         isBotThinking = false

@@ -9,9 +9,10 @@ import io.github.deanalvero.tictactoefamily.model.Player
 class EasyBot : BotStrategy {
     override fun decideMove(
         board: List<List<Cell>>,
-        hand: List<Piece>,
+        hands: Map<Player, List<Piece>>,
         botPlayer: Player
     ): MoveAction? {
+        val hand = hands[botPlayer] ?: return null
         val moves = BotUtils.generateValidMoves(MoveValidator, board, hand, botPlayer)
         if (moves.isEmpty()) return null
         return moves.random()

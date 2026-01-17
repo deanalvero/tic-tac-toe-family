@@ -40,8 +40,7 @@ fun BoardComposable() {
 
     if (engine.showWinDialog) {
         GameOverDialogComposable(
-            winner = engine.winner,
-            history = engine.moveHistory,
+            engine = engine,
             onRestart = {
                 engine.showWinDialog = false
                 engine.restart()

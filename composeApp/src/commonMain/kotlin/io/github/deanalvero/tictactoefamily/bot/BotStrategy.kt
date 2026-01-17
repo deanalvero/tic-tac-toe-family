@@ -6,5 +6,9 @@ import io.github.deanalvero.tictactoefamily.model.Piece
 import io.github.deanalvero.tictactoefamily.model.Player
 
 interface BotStrategy {
-    fun decideMove(board: List<List<Cell>>, hand: List<Piece>, botPlayer: Player): MoveAction?
+    fun decideMove(
+        board: List<List<Cell>>,
+        hands: Map<Player, List<Piece>>,
+        botPlayer: Player
+    ): MoveAction?
 }
