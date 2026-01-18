@@ -6,5 +6,5 @@ data class MoveRecord(
     val from: String,
     val to: String
 ) {
-    override fun toString(): String = "${player.label} (Rank $pieceRank): $from → $to"
+    override fun toString(): String = "${player.label} (Rank $pieceRank): $from > $to"
 }

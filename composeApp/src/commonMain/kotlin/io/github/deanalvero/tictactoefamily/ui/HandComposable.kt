@@ -1,7 +1,7 @@
 package io.github.deanalvero.tictactoefamily.ui
 
-import androidx.compose.animation.core.copy
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,12 +25,19 @@ import io.github.deanalvero.tictactoefamily.model.Player
 
 @Composable
 fun HandComposable(player: Player, hand: List<Piece>, engine: GameEngine) {
+    val isCurrentTurn = engine.currentPlayer == player
     val backgroundColor = player.color.copy(alpha = 0.1f)
-
     Row(
         Modifier
             .fillMaxWidth()
             .height(75.dp)
+            .then(
+                if (isCurrentTurn) {
+                    Modifier.border(2.dp, player.color, RoundedCornerShape(12.dp))
+                } else {
+                    Modifier
+                }
+            )
             .background(backgroundColor, RoundedCornerShape(12.dp))
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 8.dp),

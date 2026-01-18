@@ -1,6 +1,5 @@
 package io.github.deanalvero.tictactoefamily.engine
 
-import androidx.compose.animation.core.copy
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ class GameEngine(
     var p1Hand = mutableStateListOf<Piece>()
     var p2Hand = mutableStateListOf<Piece>()
     var currentPlayer by mutableStateOf(Player.BLUE)
+    var humanPlayer by mutableStateOf(Player.BLUE)
     var winner by mutableStateOf<Player?>(null)
 
     var moveHistory = mutableStateListOf<MoveRecord>()
@@ -41,10 +41,11 @@ class GameEngine(
     var validMoveHints = mutableStateListOf<Pair<Int, Int>>()
     var isBotThinking by mutableStateOf(false)
 
-    fun initializeGame(newVariant: GameVariant, newMode: GameMode, newDifficulty: Difficulty) {
+    fun initializeGame(newVariant: GameVariant, newMode: GameMode, newSide: Player, newDifficulty: Difficulty) {
         variant = newVariant
         gameMode = newMode
         difficulty = newDifficulty
+        humanPlayer = newSide
         bot = BotStrategyImpl(newDifficulty)
 
         showSetupDialog = false
@@ -68,7 +69,7 @@ class GameEngine(
         currentPlayer = Player.BLUE
         winner = null
         showWinDialog = false
-        isBotThinking = false
+        isBotThinking = gameMode == GameMode.COMPUTER && currentPlayer != humanPlayer
         clearSelection()
     }
 
@@ -146,13 +147,14 @@ class GameEngine(
             showWinDialog = true
         } else {
             currentPlayer = if (currentPlayer == Player.BLUE) Player.RED else Player.BLUE
-            if (gameMode == GameMode.COMPUTER && currentPlayer == Player.RED) {
+            if (gameMode == GameMode.COMPUTER && currentPlayer != humanPlayer) {
                 isBotThinking = true
             }
         }
     }
 
     fun runBot() {
+        val botPlayer = if (humanPlayer == Player.BLUE) Player.RED else Player.BLUE
         val action = bot.decideMove(
             board = board.map {
                 it.toList()
@@ -161,7 +163,7 @@ class GameEngine(
                 Player.BLUE to p1Hand.toList(),
                 Player.RED to p2Hand.toList()
             ),
-            botPlayer = Player.RED
+            botPlayer = botPlayer
         )
         if (action != null) executeMove(action.source, action.targetRow, action.targetCol)
         else currentPlayer = Player.BLUE

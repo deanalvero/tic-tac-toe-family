@@ -18,7 +18,9 @@ import io.github.deanalvero.tictactoefamily.model.Player
 import kotlinx.coroutines.delay
 
 @Composable
-fun BoardComposable() {
+fun BoardComposable(
+    modifier: Modifier = Modifier
+) {
     val engine = remember { GameEngine() }
 
     LaunchedEffect(engine.isBotThinking) {
@@ -30,10 +32,10 @@ fun BoardComposable() {
 
     if (engine.showSetupDialog) {
         GameSetupDialogComposable(
-            currentVariant = engine.variant,
+            variant = engine.variant,
             onDismiss = {},
-            onStart = { variant, mode, difficulty ->
-                engine.initializeGame(variant, mode, difficulty)
+            onStart = { variant, mode, side, difficulty ->
+                engine.initializeGame(variant, mode, side, difficulty)
             }
         )
     }
@@ -53,11 +55,9 @@ fun BoardComposable() {
     }
 
     Column(
-        Modifier.fillMaxSize().background(Color(0xFFFAFAFA)).padding(16.dp),
+        modifier = modifier.fillMaxSize().background(Color(0xFFFAFAFA)).padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ToolbarComposable(engine)
-        Spacer(Modifier.height(8.dp))
         HandComposable(Player.RED, engine.p2Hand, engine)
         Spacer(Modifier.weight(1f))
         GridComposable(engine)
