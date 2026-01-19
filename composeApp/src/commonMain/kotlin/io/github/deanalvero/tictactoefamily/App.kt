@@ -15,14 +15,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.deanalvero.tictactoefamily.ui.AboutComposable
 import io.github.deanalvero.tictactoefamily.ui.BoardComposable
+import io.github.deanalvero.tictactoefamily.ui.GameViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun App() {
+fun App(
+    viewModel: GameViewModel = viewModel()
+) {
     var isDropdownMenuShown by remember { mutableStateOf(false) }
     var isSourceDialogShown by remember { mutableStateOf(false) }
 
@@ -52,9 +56,9 @@ fun App() {
             }
         ) { padding ->
             BoardComposable(
-                Modifier.padding(padding).fillMaxSize()
+                modifier = Modifier.padding(padding).fillMaxSize(),
+                viewModel = viewModel
             )
-
             if (isSourceDialogShown) {
                 AboutComposable(
                     onDismiss = {
