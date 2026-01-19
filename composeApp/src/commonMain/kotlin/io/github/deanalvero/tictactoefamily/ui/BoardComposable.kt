@@ -58,12 +58,14 @@ fun BoardComposable(
     }
 
     BoxWithConstraints(
-        modifier =  modifier.background(Color(0xFFFAFAFA)).padding(16.dp)
+        modifier =  modifier.background(Color(0xFFFAFAFA)).padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
         val isVertical = maxWidth > maxHeight
         if (isVertical) {
             Row (
                 modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 HandComposable(player = Player.RED, hand = engine.p2Hand, engine = engine, isVertical = isVertical)

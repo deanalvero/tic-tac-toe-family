@@ -25,7 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App(
-    viewModel: GameViewModel = viewModel()
+    viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
 ) {
     var isDropdownMenuShown by remember { mutableStateOf(false) }
     var isSourceDialogShown by remember { mutableStateOf(false) }

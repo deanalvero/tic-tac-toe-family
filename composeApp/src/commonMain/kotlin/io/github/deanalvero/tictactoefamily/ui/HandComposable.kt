@@ -36,7 +36,7 @@ fun HandComposable(
 
     if (isVertical) {
         Column(
-            Modifier
+            modifier = Modifier
                 .fillMaxHeight()
                 .width(75.dp)
                 .then(
@@ -48,7 +48,7 @@ fun HandComposable(
                 )
                 .background(backgroundColor, RoundedCornerShape(12.dp))
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 8.dp)
         ) {
             HandItemsComposable(
                 player = player,

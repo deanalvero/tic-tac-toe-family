@@ -1,12 +1,12 @@
 # Tic Tac Toe Family
 
-Tic Tac Toe Family is a reimagination of the classic game: pieces can move, have ranks and can stack on top of one another. With different variants available to play, it transforms a solved childhood game into a complex tactical battleground.
+Tic Tac Toe Family is a reimagination of the classic game: pieces can move, have ranks and can stack on top of one another. With different variants available to play, it transforms a solved childhood game into a complex tactical battleground. Bot support is available if playing alone.
 
 This game is built using Compose Multiplatform and it runs on Android, iOS, Web, Desktop (JVM).
 
 ## Play
 
-The WASM build of the game can be played at https://deanalvero.github.io/tic-tac-toe-family/.
+The WASM build of the game can be played at https://deanalvero.github.io/tic-tac-toe-family/. You can play it on Android, iOS, and Desktop by following the Build instructions below.
 
 ## Build
 
