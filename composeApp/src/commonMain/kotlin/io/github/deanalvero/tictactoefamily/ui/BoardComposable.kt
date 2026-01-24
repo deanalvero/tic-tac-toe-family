@@ -2,10 +2,13 @@ package io.github.deanalvero.tictactoefamily.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -70,7 +73,15 @@ fun BoardComposable(
             ) {
                 HandComposable(player = Player.RED, hand = engine.p2Hand, engine = engine, isVertical = isVertical)
                 Spacer(Modifier.width(8.dp))
-                GridComposable(engine)
+                Box(
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    GridComposable(
+                        engine = engine,
+                        modifier = Modifier.aspectRatio(1f)
+                    )
+                }
                 Spacer(Modifier.width(8.dp))
                 HandComposable(player = Player.BLUE, hand = engine.p1Hand, engine = engine, isVertical = isVertical)
             }
@@ -82,7 +93,15 @@ fun BoardComposable(
             ) {
                 HandComposable(player = Player.RED, hand = engine.p2Hand, engine = engine, isVertical = isVertical)
                 Spacer(Modifier.height(8.dp))
-                GridComposable(engine)
+                Box(
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    GridComposable(
+                        engine = engine,
+                        modifier = Modifier.aspectRatio(1f)
+                    )
+                }
                 Spacer(Modifier.height(8.dp))
                 HandComposable(player = Player.BLUE, hand = engine.p1Hand, engine = engine, isVertical = isVertical)
             }

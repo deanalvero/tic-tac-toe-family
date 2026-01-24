@@ -16,22 +16,26 @@ import androidx.compose.ui.unit.dp
 import io.github.deanalvero.tictactoefamily.model.Cell
 
 @Composable
-fun SquareComposable(cell: Cell, isHint: Boolean, isSelected: Boolean, onClick: () -> Unit) {
-    val cellSize = 95.dp
+fun SquareComposable(
+    cell: Cell,
+    isHint: Boolean,
+    isSelected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     Box(
-        Modifier
-            .size(cellSize)
+        modifier = modifier
             .border(0.5.dp, Color(0xFFEEEEEE))
             .background(Color.White)
             .clickable {
                 onClick()
             },
-        Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         if (isHint) Box(Modifier.fillMaxSize().background(Color(0xFF66BB6A).copy(0.2f)))
 
         cell.topPiece?.let {
-            PieceComposable(it, isSelected, cellSize * 0.75f)
+            PieceComposable(it, isSelected, 100.dp)
         }
 
         if (isHint && cell.topPiece == null) {
