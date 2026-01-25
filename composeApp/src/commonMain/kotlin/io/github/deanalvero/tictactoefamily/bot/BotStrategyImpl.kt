@@ -10,7 +10,7 @@ import io.github.deanalvero.tictactoefamily.model.TiebreakerRule
 class BotStrategyImpl(difficulty: Difficulty, tiebreakerRule: TiebreakerRule) : BotStrategy {
     val bot: BotStrategy = when (difficulty) {
         Difficulty.EASY -> EasyBot()
-        Difficulty.MEDIUM -> MediumBot()
+        Difficulty.MEDIUM -> MediumBot(tiebreakerRule = tiebreakerRule)
         Difficulty.HARD -> HardBot(tiebreakerRule = tiebreakerRule)
     }
 

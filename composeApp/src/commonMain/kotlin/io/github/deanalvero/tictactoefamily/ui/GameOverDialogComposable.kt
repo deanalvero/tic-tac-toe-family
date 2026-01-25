@@ -4,9 +4,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import io.github.deanalvero.tictactoefamily.engine.GameEngine
 import io.github.deanalvero.tictactoefamily.model.GameMode
+import io.github.deanalvero.tictactoefamily.model.Piece
 
 @Composable
 fun GameOverDialogComposable(
@@ -94,8 +97,21 @@ fun GameOverDialogComposable(
                     Text("No moves made.")
                 }
                 history.forEachIndexed { index, record ->
-                    Row(Modifier.padding(vertical = 4.dp)) {
+                    Row(
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text("${index + 1}. ", color = Color.Gray, fontSize = 14.sp)
+                        PieceComposable(
+                            piece = Piece(
+                                id = "history_$index",
+                                owner = record.player,
+                                rank = record.pieceRank
+                            ),
+                            isSelected = false,
+                            size = 24.dp
+                        )
+                        Spacer(Modifier.width(4.dp))
                         Text(record.toString(), fontSize = 14.sp, color = Color.DarkGray)
                     }
                 }

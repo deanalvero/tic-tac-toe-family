@@ -26,6 +26,7 @@ fun GridComposable(
         engine.board.forEachIndexed { rIndex, row ->
             Row(modifier = Modifier.weight(1f)) {
                 row.forEachIndexed { cIndex, cell ->
+                    val label = "${'A' + cIndex}${3 - rIndex}"
                     val isHint = engine.validMoveHints.contains(rIndex to cIndex)
                     val isSelected = engine.selectedSource is MoveSource.Board &&
                             (engine.selectedSource as MoveSource.Board).row == rIndex &&
@@ -35,6 +36,7 @@ fun GridComposable(
                         cell = cell,
                         isHint = isHint,
                         isSelected = isSelected,
+                        label = label,
                         modifier = Modifier.weight(1f).fillMaxHeight()
                     ) {
                         engine.handleCellClick(

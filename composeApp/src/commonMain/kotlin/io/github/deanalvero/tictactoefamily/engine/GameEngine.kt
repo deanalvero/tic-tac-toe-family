@@ -125,11 +125,17 @@ class GameEngine(
     private fun executeMove(source: MoveSource, tr: Int, tc: Int) {
         val p = getPiece(source) ?: return
 
+        fun positionString(r: Int, c: Int): String {
+            val colChar = ('A' + c)
+            val rowNum = 3 - r
+            return "$colChar$rowNum"
+        }
+
         val fromStr = when (source) {
             is MoveSource.Hand -> "Hand"
-            is MoveSource.Board -> "(${source.row + 1},${source.col + 1})"
+            is MoveSource.Board -> positionString(source.row, source.col)
         }
-        val toStr = "(${tr + 1},${tc + 1})"
+        val toStr = positionString(tr, tc)
         moveHistory.add(MoveRecord(p.owner, p.rank, fromStr, toStr))
 
         when (source) {
