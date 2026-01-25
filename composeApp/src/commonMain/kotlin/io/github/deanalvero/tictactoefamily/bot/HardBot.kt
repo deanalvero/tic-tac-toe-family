@@ -4,7 +4,10 @@ import io.github.deanalvero.tictactoefamily.engine.MoveValidator
 import io.github.deanalvero.tictactoefamily.engine.WinChecker
 import io.github.deanalvero.tictactoefamily.model.*
 
-class HardBot(private val maxDepth: Int = 4) : BotStrategy {
+class HardBot(
+    private val maxDepth: Int = 4,
+    private val tiebreakerRule: TiebreakerRule
+) : BotStrategy {
     private val winChecker = WinChecker()
 
     override fun decideMove(board: List<List<Cell>>, hands: Map<Player, List<Piece>>, botPlayer: Player): MoveAction? {
@@ -14,7 +17,8 @@ class HardBot(private val maxDepth: Int = 4) : BotStrategy {
             depth = 0,
             blueScore = Int.MIN_VALUE,
             redScore = Int.MAX_VALUE,
-            isBluePlayer = botPlayer == Player.BLUE
+            isBluePlayer = botPlayer == Player.BLUE,
+            lastMover = if (botPlayer == Player.BLUE) Player.RED else Player.BLUE
         )
         return bestMove
     }
@@ -25,9 +29,10 @@ class HardBot(private val maxDepth: Int = 4) : BotStrategy {
         depth: Int,
         blueScore: Int,
         redScore: Int,
-        isBluePlayer: Boolean
+        isBluePlayer: Boolean,
+        lastMover: Player
     ): Pair<MoveAction?, Int> {
-        val winner = winChecker.check(board)
+        val winner = winner(board, lastMover)
         if (winner == Player.BLUE) return null to (10000 - depth)
         if (winner == Player.RED) return null to (-10000 + depth)
         if (depth >= maxDepth) return null to evaluateBoard(board, hands)
@@ -51,7 +56,8 @@ class HardBot(private val maxDepth: Int = 4) : BotStrategy {
                     depth = depth + 1,
                     blueScore = currentBlueScore,
                     redScore = currentRedScore,
-                    isBluePlayer = false
+                    isBluePlayer = false,
+                    lastMover = Player.BLUE
                 )
                 if (score > maxBlueScore) {
                     maxBlueScore = score
@@ -71,7 +77,8 @@ class HardBot(private val maxDepth: Int = 4) : BotStrategy {
                     depth = depth + 1,
                     blueScore = currentBlueScore,
                     redScore = currentRedScore,
-                    isBluePlayer = true
+                    isBluePlayer = true,
+                    lastMover = Player.RED
                 )
 
                 if (score < minRedScore) {
@@ -151,5 +158,17 @@ class HardBot(private val maxDepth: Int = 4) : BotStrategy {
         nextBoard[move.targetRow][move.targetCol] = targetCell.copy(pieces = targetCell.pieces + piece)
 
         return nextBoard to nextHands.mapValues { it.value.toList() }
+    }
+
+    private fun winner(board: List<List<Cell>>, initiator: Player): Player? {
+        val winners = winChecker.check(board)
+        if (winners.isEmpty()) return null
+        if (winners.size == 1) return winners.first()
+
+        return if (tiebreakerRule == TiebreakerRule.INITIATIVE) {
+            initiator
+        } else {
+            if (initiator == Player.BLUE) Player.RED else Player.BLUE
+        }
     }
 }

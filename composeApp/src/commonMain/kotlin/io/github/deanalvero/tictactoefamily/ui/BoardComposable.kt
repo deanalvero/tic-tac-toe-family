@@ -40,8 +40,8 @@ fun BoardComposable(
         GameSetupDialogComposable(
             variant = engine.variant,
             onDismiss = {},
-            onStart = { variant, mode, side, difficulty ->
-                engine.initializeGame(variant, mode, side, difficulty)
+            onStart = { variant, mode, side, difficulty, tiebreakerRule ->
+                engine.initializeGame(variant, mode, side, difficulty, tiebreakerRule)
             }
         )
     }

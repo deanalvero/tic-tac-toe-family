@@ -34,17 +34,19 @@ import io.github.deanalvero.tictactoefamily.model.Difficulty
 import io.github.deanalvero.tictactoefamily.model.GameMode
 import io.github.deanalvero.tictactoefamily.model.GameVariant
 import io.github.deanalvero.tictactoefamily.model.Player
+import io.github.deanalvero.tictactoefamily.model.TiebreakerRule
 
 @Composable
 fun GameSetupDialogComposable(
     variant: GameVariant,
     onDismiss: () -> Unit,
-    onStart: (GameVariant, GameMode, Player, Difficulty) -> Unit
+    onStart: (GameVariant, GameMode, Player, Difficulty, TiebreakerRule) -> Unit
 ) {
     var selectedVariant by remember { mutableStateOf(variant) }
     var selectedMode by remember { mutableStateOf(GameMode.COMPUTER) }
     var selectedDifficulty by remember { mutableStateOf(Difficulty.MEDIUM) }
     var selectedSide by remember { mutableStateOf(Player.BLUE) }
+    var selectedTiebreakerRule by remember { mutableStateOf(TiebreakerRule.INITIATIVE) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -149,11 +151,38 @@ fun GameSetupDialogComposable(
                         }
                     }
                 }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    "Tiebreaker Rule",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Row(
+                    Modifier.fillMaxWidth()
+                ) {
+                    TiebreakerRule.entries.forEach {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = selectedTiebreakerRule == it,
+                                onClick = { selectedTiebreakerRule = it }
+                            )
+                            Text(it.text, Modifier.clickable { selectedTiebreakerRule = it })
+                        }
+                    }
+                }
+                Spacer(Modifier.height(16.dp))
             }
         },
         confirmButton = {
             Button(onClick = {
-                onStart(selectedVariant, selectedMode, selectedSide, selectedDifficulty)
+                onStart(
+                    selectedVariant,
+                    selectedMode,
+                    selectedSide,
+                    selectedDifficulty,
+                    selectedTiebreakerRule
+                )
             }) {
                 Text("Start")
             }

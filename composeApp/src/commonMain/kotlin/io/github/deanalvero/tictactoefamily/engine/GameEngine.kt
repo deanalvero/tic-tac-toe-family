@@ -15,6 +15,7 @@ import io.github.deanalvero.tictactoefamily.model.MoveRecord
 import io.github.deanalvero.tictactoefamily.model.MoveSource
 import io.github.deanalvero.tictactoefamily.model.Piece
 import io.github.deanalvero.tictactoefamily.model.Player
+import io.github.deanalvero.tictactoefamily.model.TiebreakerRule
 
 class GameEngine(
     private val validator: MoveValidator = MoveValidator,
@@ -32,21 +33,29 @@ class GameEngine(
     var variant by mutableStateOf(GameVariant.STANDARD)
     var gameMode by mutableStateOf(GameMode.COMPUTER)
     var difficulty by mutableStateOf(Difficulty.MEDIUM)
+    var tiebreakerRule by mutableStateOf(TiebreakerRule.INITIATIVE)
     var showSetupDialog by mutableStateOf(true)
     var showWinDialog by mutableStateOf(false)
 
-    private var bot: BotStrategy = BotStrategyImpl(difficulty)
+    private var bot: BotStrategy = BotStrategyImpl(difficulty, tiebreakerRule)
 
     var selectedSource by mutableStateOf<MoveSource?>(null)
     var validMoveHints = mutableStateListOf<Pair<Int, Int>>()
     var isBotThinking by mutableStateOf(false)
 
-    fun initializeGame(newVariant: GameVariant, newMode: GameMode, newSide: Player, newDifficulty: Difficulty) {
+    fun initializeGame(
+        newVariant: GameVariant,
+        newMode: GameMode,
+        newSide: Player,
+        newDifficulty: Difficulty,
+        newTiebreakerRule: TiebreakerRule
+    ) {
         variant = newVariant
         gameMode = newMode
         difficulty = newDifficulty
         humanPlayer = newSide
-        bot = BotStrategyImpl(newDifficulty)
+        tiebreakerRule = newTiebreakerRule
+        bot = BotStrategyImpl(newDifficulty, tiebreakerRule)
 
         showSetupDialog = false
         restart()
@@ -142,8 +151,18 @@ class GameEngine(
     }
 
     private fun checkGameState() {
-        winner = winChecker.check(board)
-        if (winner != null) {
+        val winners = winChecker.check(board)
+
+        if (winners.isNotEmpty()) {
+            winner = if (winners.size > 1) {
+                if (tiebreakerRule == TiebreakerRule.INITIATIVE) {
+                    currentPlayer
+                } else {
+                    if (currentPlayer == Player.BLUE) Player.RED else Player.BLUE
+                }
+            } else {
+                winners.first()
+            }
             showWinDialog = true
         } else {
             currentPlayer = if (currentPlayer == Player.BLUE) Player.RED else Player.BLUE

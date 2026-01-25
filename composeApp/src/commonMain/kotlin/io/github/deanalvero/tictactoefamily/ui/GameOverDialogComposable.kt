@@ -60,6 +60,7 @@ fun GameOverDialogComposable(
                     Text("Your Side: ${engine.humanPlayer.label}")
                     Text("Difficulty: ${engine.difficulty.text}")
                 }
+                Text("Tiebreaker Rule: ${engine.tiebreakerRule.text}")
                 Box(
                     Modifier
                         .align(Alignment.CenterHorizontally)
