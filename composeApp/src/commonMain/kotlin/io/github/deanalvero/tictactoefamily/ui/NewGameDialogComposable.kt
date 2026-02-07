@@ -1,27 +1,28 @@
 package io.github.deanalvero.tictactoefamily.ui
 
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-fun AboutComposable(
+fun NewGameDialogComposable(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        title = { Text("New Game") },
+        text = { Text("Are you sure you want to exit the current game and start a new one?") },
         confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text("OK")
+            Button(onClick = onConfirm) {
+                Text("Restart")
             }
         },
-        title = { Text("About") },
-        text = {
-            SelectionContainer {
-                Text("Tic Tac Toe Family by Dean Vernon Alvero. The source code can be found at https://github.com/deanalvero/tic-tac-toe-family.")
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
             }
         }
     )

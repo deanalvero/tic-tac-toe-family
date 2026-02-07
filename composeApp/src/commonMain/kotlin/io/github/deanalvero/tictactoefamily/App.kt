@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.deanalvero.tictactoefamily.ui.AboutComposable
 import io.github.deanalvero.tictactoefamily.ui.BoardComposable
 import io.github.deanalvero.tictactoefamily.ui.GameViewModel
+import io.github.deanalvero.tictactoefamily.ui.NewGameDialogComposable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,6 +30,7 @@ fun App(
 ) {
     var isDropdownMenuShown by remember { mutableStateOf(false) }
     var isSourceDialogShown by remember { mutableStateOf(false) }
+    var isConfirmRestartShown by remember { mutableStateOf(false) }
 
     MaterialTheme {
         Scaffold(
@@ -43,6 +45,13 @@ fun App(
                             expanded = isDropdownMenuShown,
                             onDismissRequest = { isDropdownMenuShown = false }
                         ) {
+                            DropdownMenuItem(
+                                text = { Text("New Game") },
+                                onClick = {
+                                    isDropdownMenuShown = false
+                                    isConfirmRestartShown = true
+                                }
+                            )
                             DropdownMenuItem(
                                 text = { Text("About") },
                                 onClick = {
@@ -59,12 +68,25 @@ fun App(
                 modifier = Modifier.padding(padding).fillMaxSize(),
                 viewModel = viewModel
             )
+
+            if (isConfirmRestartShown) {
+                NewGameDialogComposable(
+                    onDismiss = {
+                        isConfirmRestartShown = false
+                    },
+                    onConfirm = {
+                        isConfirmRestartShown = false
+                        viewModel.engine.restart()
+                        viewModel.engine.showSetupDialog = true
+                    }
+                )
+            }
             if (isSourceDialogShown) {
                 AboutComposable(
                     onDismiss = {
                         isSourceDialogShown = false
                     },
-                    onOk = {
+                    onConfirm = {
                         isSourceDialogShown = false
                     }
                 )
